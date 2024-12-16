@@ -1,5 +1,19 @@
 {
+  "name": "mern-blog",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon backend/index.js",
+    "start": "node backend/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "react-router-dom": "^7.0.2"
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
   }
 }
