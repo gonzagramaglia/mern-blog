@@ -20,7 +20,11 @@ export const signup = async (req, res, next) => {
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
-  const newUser = new User({ email, username, password: hashedPassword });
+  const newUser = new User({
+    email: email.toLowerCase(),
+    username: username.toLowerCase(),
+    password: hashedPassword,
+  });
 
   try {
     await newUser.save();
@@ -39,7 +43,7 @@ export const signin = async (req, res, next) => {
   }
 
   try {
-    const validUser = await User.findOne({ email });
+    const validUser = await User.findOne({ email: email.toLowerCase() });
     if (!validUser) {
       return next(errorHandler(404, "User not found."));
     }
