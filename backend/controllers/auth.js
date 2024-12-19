@@ -18,6 +18,30 @@ export const signup = async (req, res, next) => {
     // previously => return res.status(400).json({ message: "All fields are required." });
   }
 
+  if (password.length < 6) {
+    return next(
+      errorHandler(400, "Password must be at least 6 characters long.")
+    );
+  }
+
+  if (username.length < 4 || username.length > 20 || username.includes(" ")) {
+    return next(
+      errorHandler(
+        400,
+        "Username must be between 4 and 20 characters long and cannot contain any spaces."
+      )
+    );
+  }
+
+  if (username.match(/^[a-zA-Z0-9_]*$/)) {
+    return next(
+      errorHandler(
+        400,
+        "Username can only contain letters, numbers, and underscores."
+      )
+    );
+  }
+
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   const newUser = new User({
