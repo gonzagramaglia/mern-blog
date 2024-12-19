@@ -7,6 +7,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
@@ -17,13 +18,11 @@ const SignIn = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
   const handleSubmit = async (e) => {
-    console.log("Hey");
     e.preventDefault();
     if (!formData.email || !formData.password) {
       return dispatch(signInFailure("Please fill out all fields."));
     }
     try {
-      console.log("Hey there");
       dispatch(signInStart());
       // setErrorMessage(null);
       // setLoading(true);
@@ -101,6 +100,7 @@ const SignIn = () => {
                   "Sign In"
                 )}
               </Button>
+              <OAuth />
             </form>
             <div className="flex gap-2 text-sm mt-3">
               <span>Don't have an account yet?</span>
