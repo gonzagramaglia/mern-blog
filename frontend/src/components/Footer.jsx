@@ -24,14 +24,14 @@ const TheFooter = () => {
                 <Footer.Title title="About" />
                 <Footer.LinkGroup col>
                   <Footer.Link
-                    href="https://front.gonza.gr"
+                    href="https://gonza.gr"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Frontend Portfolio
                   </Footer.Link>
                   <Footer.Link
-                    href="https://back.gonza.gr"
+                    href="https://www.youtube.com/@gonzagramaglia/videos"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
