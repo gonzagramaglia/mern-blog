@@ -1,16 +1,13 @@
 import express from "express";
+import { PORT, MONGODB_URI } from "./config.js";
 import cors from "cors";
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import userRoutes from "./routes/user.js";
 import authRoutes from "./routes/auth.js";
 import cookieParser from "cookie-parser";
 
-dotenv.config();
-const PORT = process.env.PORT;
-
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(MONGODB_URI)
   .then(() => console.log("MongoDB is connected"))
   .catch((err) => console.log(err));
 

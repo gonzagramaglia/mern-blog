@@ -1,0 +1,9 @@
+These two alternatives works exactly the same as "nodemon backend/index.js":
+
+1) package.json
+> "scripts"
+>> "dev"
+>>> "node --watch backend/index.js"
+
+2) shell (root folder)
+node --run dev

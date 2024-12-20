@@ -60,7 +60,7 @@ export const updateUser = async (req, res, next) => {
         new: true,
       }
     );
-    const { password, ...rest } = updatedUser._doc;
+    const { password, ...rest } = updatedUser._doc; // best practices: https://youtube.com/clip/UgkxxGa2cLhwqoZh30JnFHQgkxkY5Idycr9B
     res.status(200).json(rest);
   } catch (err) {
     return next(err);

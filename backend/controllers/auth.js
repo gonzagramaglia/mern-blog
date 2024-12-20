@@ -2,6 +2,7 @@ import User from "../models/user.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../config.js";
 
 export const signup = async (req, res, next) => {
   const { email, username, password } = req.body;
@@ -77,15 +78,15 @@ export const signin = async (req, res, next) => {
     }
     const token = jwt.sign(
       {
-        id: validUser._id,
+        id: validUser._id, // payload
       },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+      JWT_SECRET, // private key
+      { expiresIn: "1d" } // [options] not required
+    ); // [callback] not required
     res
       .status(200)
       .cookie("access_token", token, {
-        httpOnly: true,
+        httpOnly: true, // security layer
       })
       .json(validUser);
   } catch (err) {
@@ -97,16 +98,18 @@ export const google = async (req, res, next) => {
   const { email, name, googlePhotoURL } = req.body;
   try {
     const user = await User.findOne({ email });
+    // if user already exists, sign in
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user._id }, JWT_SECRET); // payload + private key (both always required)
       const { password, ...rest } = user._doc;
       res
         .status(200)
         .cookie("access_token", token, {
-          httpOnly: true,
+          httpOnly: true, // security layer. https://youtube.com/clip/UgkxGAnoi5Il4a4jFXSEox2-glcogf8l0igx
         })
         .json(rest);
     } else {
+      // if user doesnt exist in the database, create a new user...
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8);
@@ -120,12 +123,13 @@ export const google = async (req, res, next) => {
         profilePicture: googlePhotoURL,
       });
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      // ...and then sign in with the new user
+      const token = jwt.sign({ id: newUser._id }, JWT_SECRET); // payload + private key (both always required)
       const { password, ...rest } = newUser._doc;
       res
         .status(200)
         .cookie("access_token", token, {
-          httpOnly: true,
+          httpOnly: true, // security layer. https://youtube.com/clip/UgkxGAnoi5Il4a4jFXSEox2-glcogf8l0igx
         })
         .json(rest);
     }
