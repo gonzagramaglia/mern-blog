@@ -15,7 +15,6 @@ export const createPost = async (req, res, next) => {
     .toLowerCase()
     .replace(/[^a-zA-Z-]/g, "");
 
-  console.log(req.user.id);
   const newPost = new Post({
     userId: req.user.id,
     ...req.body,
