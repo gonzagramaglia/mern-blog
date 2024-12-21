@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Button, TextInput, Alert, Modal } from "flowbite-react";
 import { useState, useRef, useEffect } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Link } from "react-router-dom";
 import {
   updateStart,
   updateSuccess,
@@ -248,6 +249,13 @@ const DashProfile = () => {
           <Button type="submit" color="indigo" disabled={imageFileUploading}>
             Update
           </Button>
+          {currentUser.isAdmin && (
+            <Link to={"/create-post"}>
+              <Button type="button" color="teal" className="w-full">
+                Create a Post
+              </Button>
+            </Link>
+          )}
         </form>
         {updateUserSuccess && (
           <Alert className="mt-5" color="success">

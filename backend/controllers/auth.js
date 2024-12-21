@@ -78,7 +78,8 @@ export const signin = async (req, res, next) => {
     }
     const token = jwt.sign(
       {
-        id: validUser._id, // payload
+        id: validUser._id,
+        isAdmin: validUser.isAdmin, // payload
       },
       JWT_SECRET, // private key
       { expiresIn: "1d" } // [options] not required
@@ -100,7 +101,10 @@ export const google = async (req, res, next) => {
     const user = await User.findOne({ email });
     // if user already exists, sign in
     if (user) {
-      const token = jwt.sign({ id: user._id }, JWT_SECRET); // payload + private key (both always required)
+      const token = jwt.sign(
+        { id: user._id, isAdmin: user.isAdmin },
+        JWT_SECRET
+      ); // payload + private key (both always required)
       const { password, ...rest } = user._doc;
       res
         .status(200)
@@ -124,7 +128,10 @@ export const google = async (req, res, next) => {
       });
       await newUser.save();
       // ...and then sign in with the new user
-      const token = jwt.sign({ id: newUser._id }, JWT_SECRET); // payload + private key (both always required)
+      const token = jwt.sign(
+        { id: newUser._id, isAdmin: newUser.isAdmin },
+        JWT_SECRET
+      ); // payload + private key (both always required)
       const { password, ...rest } = newUser._doc;
       res
         .status(200)
