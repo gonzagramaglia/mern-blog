@@ -4,6 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import userRoutes from "./routes/user.js";
 import authRoutes from "./routes/auth.js";
+import postRoutes from "./routes/post.js";
 import cookieParser from "cookie-parser";
 
 mongoose
@@ -23,6 +24,7 @@ app.listen(PORT, () => {
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/post", postRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
