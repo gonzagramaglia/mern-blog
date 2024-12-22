@@ -2,6 +2,7 @@ import { TextInput, Select, FileInput, Button, Alert } from "flowbite-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { app } from "../firebase";
 import {
   ref,
@@ -17,6 +18,8 @@ const CreatePost = () => {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
+  const [publishError, setPublishError] = useState(null);
+  const navigate = useNavigate();
 
   const handleUploadImage = async () => {
     try {
@@ -51,7 +54,30 @@ const CreatePost = () => {
     } catch (err) {
       setImageUploadError("Image upload failed");
       setImageUploadProgress(null);
-      console.log(err);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`/api/post/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      } else {
+        setPublishError(null);
+        navigate(`/post/${data.slug}`);
+      }
+    } catch (err) {
+      setPublishError("Something went wrong");
     }
   };
 
@@ -61,7 +87,7 @@ const CreatePost = () => {
         <h1 className="text-center text-3xl my-7 font-semibold">
           Create a post
         </h1>
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4 mb-10" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4 sm:flex-row justify-between">
             <TextInput
               type="text"
@@ -69,8 +95,17 @@ const CreatePost = () => {
               required
               id="title"
               className="flex-1"
+              onChange={(e) => {
+                setFormData({ ...formData, title: e.target.value });
+                setPublishError(null);
+              }}
             />
-            <Select>
+            <Select
+              onChange={(e) => {
+                setFormData({ ...formData, category: e.target.value });
+                setPublishError(null);
+              }}
+            >
               <option value="uncategorized">Select a category</option>
               <option value="javascript">JavaScript</option>
               <option value="react">React.js</option>
@@ -82,7 +117,10 @@ const CreatePost = () => {
             <FileInput
               type="file"
               accept="image/*"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={(e) => {
+                setFile(e.target.files[0]);
+                setPublishError(null);
+              }}
             />
             <Button
               type="button"
@@ -109,13 +147,18 @@ const CreatePost = () => {
           {formData.image && <img src={formData.image} alt="upload" />}
           <ReactQuill
             theme="snow"
-            placeholder="Write something... (required)"
+            placeholder="Write something..."
             className="h-72 mb-12"
             required
+            onChange={(value) => {
+              setFormData({ ...formData, content: value });
+              setPublishError(null);
+            }}
           />
-          <Button type="submit" className="mb-10" color="teal">
+          <Button type="submit" color="teal">
             Publish
           </Button>
+          {publishError && <Alert color="failure">{publishError}</Alert>}
         </form>
       </div>
     </>
