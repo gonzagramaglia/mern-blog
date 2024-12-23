@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Table, Button } from "flowbite-react";
+import { Table, Button, Modal } from "flowbite-react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
 const DashPost = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [userPosts, setUserPosts] = useState([]);
   const [showMore, setShowMore] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState("");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -31,7 +34,7 @@ const DashPost = () => {
     if (currentUser.isAdmin) {
       fetchPosts();
     }
-  }, [currentUser._id]);
+  }, [currentUser]);
 
   const handleShowMore = async () => {
     const startIndex = userPosts.length;
@@ -51,10 +54,32 @@ const DashPost = () => {
     }
   };
 
+  const handleDeletePost = async () => {
+    setShowModal(false);
+    try {
+      const res = await fetch(
+        `/api/post/deletepost/${postIdToDelete}/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setUserPosts((prevPosts) =>
+          prevPosts.filter((post) => post._id !== postIdToDelete)
+        );
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   return (
     <>
-      <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
-        {currentUser.isAdmin && userPosts.length > 0 ? (
+      <div className="table-auto overflow-x-scroll md:mx-auto p-3 w-full md:px-20 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+        {currentUser && currentUser.isAdmin && userPosts.length > 0 ? (
           <>
             <Table hoverable className="shadow-md">
               <Table.Head>
@@ -92,7 +117,14 @@ const DashPost = () => {
                     </Table.Cell>
                     <Table.Cell>{post.category}</Table.Cell>
                     <Table.Cell>
-                      <span className="font-medium text-red-500 hover:underline cursor-pointer">
+                      <span
+                        onClick={() => {
+                          setShowModal(true);
+                          setPostIdToDelete(post._id);
+                          // handleDeletePost();
+                        }}
+                        className="font-medium text-red-500 hover:underline cursor-pointer"
+                      >
                         Delete
                       </span>
                     </Table.Cell>
@@ -119,6 +151,33 @@ const DashPost = () => {
           </>
         ) : (
           <p className="mt-16">There's no posts</p>
+        )}
+        {showModal && (
+          <Modal
+            show={showModal}
+            onClick={() => setShowModal(false)}
+            popup
+            size="md"
+          >
+            <Modal.Header />
+            <Modal.Body>
+              <div className="text-center">
+                <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+                <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
+                  Are you sure you want to delete your post? This action cannot
+                  be undone.
+                </h3>
+                <div className="flex justify-between px-3">
+                  <Button color="gray" onClick={() => setShowModal(false)}>
+                    Cancel
+                  </Button>
+                  <Button color="failure" onClick={handleDeletePost}>
+                    Yes, I'm sure
+                  </Button>
+                </div>
+              </div>
+            </Modal.Body>
+          </Modal>
         )}
       </div>
     </>
