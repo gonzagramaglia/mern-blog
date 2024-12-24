@@ -144,7 +144,13 @@ const CreatePost = () => {
           {imageUploadError && (
             <Alert color="failure">{imageUploadError}</Alert>
           )}
-          {formData.image && <img src={formData.image} alt="upload" />}
+          {formData.image && (
+            <img
+              src={formData.image}
+              alt="upload"
+              className="w-full h-72 object-cover"
+            />
+          )}
           <ReactQuill
             theme="snow"
             placeholder="Write something..."

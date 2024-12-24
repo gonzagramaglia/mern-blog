@@ -115,7 +115,11 @@ const DashPost = () => {
                         {post.title}
                       </Link>
                     </Table.Cell>
-                    <Table.Cell>{post.category}</Table.Cell>
+                    <Table.Cell>
+                      {post.category === "uncategorized"
+                        ? "-"
+                        : `#${post.category}`}
+                    </Table.Cell>
                     <Table.Cell>
                       <span
                         onClick={() => {
