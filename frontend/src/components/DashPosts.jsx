@@ -121,7 +121,6 @@ const DashPost = () => {
                         onClick={() => {
                           setShowModal(true);
                           setPostIdToDelete(post._id);
-                          // handleDeletePost();
                         }}
                         className="font-medium text-red-500 hover:underline cursor-pointer"
                       >
@@ -131,7 +130,7 @@ const DashPost = () => {
                     <Table.Cell>
                       <Link
                         className="text-teal-500 hover:underline"
-                        to={`/update-post/${post.id}`}
+                        to={`/update-post/${post._id}`}
                       >
                         <span>Edit</span>
                       </Link>
