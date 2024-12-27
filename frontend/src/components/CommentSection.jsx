@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Textarea, Alert } from "flowbite-react";
+import { Button, Textarea, Alert, Modal } from "flowbite-react";
 import Comment from "./Comment";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
@@ -10,6 +11,8 @@ const CommentSection = ({ postId }) => {
   const [commentError, setCommentError] = useState(null);
   const [comments, setComments] = useState([]);
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState(null);
 
   useEffect(() => {
     const getComments = async () => {
@@ -83,11 +86,33 @@ const CommentSection = ({ postId }) => {
   };
 
   const handleEdit = async (comment, editedContent) => {
+    if (!currentUser) {
+      navigate("/sign-in");
+      return;
+    }
     setComments(
       comments.map((c) =>
         c._id === comment._id ? { ...c, content: editedContent } : c
       )
     );
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (!currentUser) {
+        navigate("/sign-in");
+        return;
+      }
+      const res = await fetch(`/api/comment/deleteComment/${commentToDelete}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setComments(comments.filter((c) => c._id !== commentToDelete));
+        setShowModal(false);
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (
@@ -99,7 +124,7 @@ const CommentSection = ({ postId }) => {
             <img
               className="h-5 w-5 object-cover rounded-full"
               src={currentUser.profilePicture}
-              alt=""
+              alt={currentUser.username}
             />
             <Link
               to="/dashboard?tab=profile"
@@ -160,10 +185,41 @@ const CommentSection = ({ postId }) => {
                   comment={comment}
                   onLike={handleLike}
                   onEdit={handleEdit}
+                  onDelete={(commentId) => {
+                    setShowModal(true);
+                    setCommentToDelete(commentId);
+                  }}
                 />
               ))}
             </div>
           </>
+        )}
+        {showModal && (
+          <Modal
+            show={showModal}
+            onClick={() => setShowModal(false)}
+            popup
+            size="md"
+          >
+            <Modal.Header />
+            <Modal.Body>
+              <div className="text-center">
+                <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+                <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
+                  Are you sure you want to delete this comment? This action
+                  cannot be undone.
+                </h3>
+                <div className="flex justify-between px-3">
+                  <Button color="gray" onClick={() => setShowModal(false)}>
+                    Cancel
+                  </Button>
+                  <Button color="failure" onClick={handleDelete}>
+                    Yes, I'm sure
+                  </Button>
+                </div>
+              </div>
+            </Modal.Body>
+          </Modal>
         )}
       </div>
     </>
