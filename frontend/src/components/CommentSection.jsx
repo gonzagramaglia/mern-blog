@@ -81,6 +81,15 @@ const CommentSection = ({ postId }) => {
       setCommentError(err.message);
     }
   };
+
+  const handleEdit = async (comment, editedContent) => {
+    setComments(
+      comments.map((c) =>
+        c._id === comment._id ? { ...c, content: editedContent } : c
+      )
+    );
+  };
+
   return (
     <>
       <div className="max-w-2xl mx-auto w-full p-3">
@@ -117,6 +126,7 @@ const CommentSection = ({ postId }) => {
               rows="3"
               maxLength="200"
               onChange={(e) => setComment(e.target.value)}
+              value={comment}
             />
             <div className="flex justify-between items-center mt-5">
               <p className="text-gray-500 text-xs">
@@ -149,6 +159,7 @@ const CommentSection = ({ postId }) => {
                   key={comment._id}
                   comment={comment}
                   onLike={handleLike}
+                  onEdit={handleEdit}
                 />
               ))}
             </div>
