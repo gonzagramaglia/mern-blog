@@ -9,8 +9,14 @@ const CallToAction = () => {
           <p className="text-gray-500 my-2">
             Visit the freeCodeCamp Youtube channel, it has high quality courses
           </p>
-          <Button className="rounded-xl max-w-md mx-7 mt-3">
-            <a href="https://www.youtube.com/@freecodecamp/videos">Go now</a>
+          <Button className="rounded-xl max-w-md w-44 mx-auto mt-3">
+            <a
+              href="https://www.youtube.com/@freecodecamp/videos"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Go now
+            </a>
           </Button>
         </div>
         <div className="p-7">
