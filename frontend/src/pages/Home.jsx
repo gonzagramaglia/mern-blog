@@ -8,7 +8,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch(`/api/post/getposts`);
+      const res = await fetch(`/api/post/getposts?limit=3`);
       const data = await res.json();
       setPosts(data.posts);
     };
@@ -25,7 +25,7 @@ const Home = () => {
         </p>
         <Link
           to="/search"
-          className="text-xs sm:text-sm text-teal-500 font-bold"
+          className="text-xs sm:text-sm text-teal-500 font-bold hover:underline"
         >
           View all posts
         </Link>
@@ -44,6 +44,12 @@ const Home = () => {
             </div>
           </div>
         )}
+        <Link
+          to="/search"
+          className="text-xs sm:text-sm text-teal-500 font-bold hover:underline text-center"
+        >
+          View all posts
+        </Link>
       </div>
     </>
   );

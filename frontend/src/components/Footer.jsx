@@ -19,9 +19,9 @@ const TheFooter = () => {
                 Blog
               </Link>
             </div>
-            <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6">
+            <div className="grid grid-cols-2 mt-4 ">
               <div>
-                <Footer.Title title="About" />
+                <Footer.Title title="Showcase" />
                 <Footer.LinkGroup col>
                   <Footer.Link
                     href="https://gonza.gr"
@@ -39,8 +39,8 @@ const TheFooter = () => {
                   </Footer.Link>
                 </Footer.LinkGroup>
               </div>
-              <div>
-                <Footer.Title title="Social " />
+              <div className="ml-auto">
+                <Footer.Title title="Social" />
                 <Footer.LinkGroup col>
                   <Footer.Link
                     href="https://www.github.com/gonzagramaglia"
@@ -52,13 +52,6 @@ const TheFooter = () => {
                   <Footer.Link href="https://www.linkedin.com/in/gonzagramaglia">
                     LinkedIn
                   </Footer.Link>
-                </Footer.LinkGroup>
-              </div>
-              <div>
-                <Footer.Title title="Legal" />
-                <Footer.LinkGroup col>
-                  <p>Privacy Policy</p>
-                  <p>Terms &amp; Conditions</p>
                 </Footer.LinkGroup>
               </div>
             </div>
