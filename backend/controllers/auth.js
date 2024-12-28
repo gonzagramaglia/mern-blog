@@ -34,7 +34,7 @@ export const signup = async (req, res, next) => {
     );
   }
 
-  if (username.match(/^[a-zA-Z0-9_]*$/)) {
+  if (!username.match(/^[a-zA-Z0-9_]*$/)) {
     return next(
       errorHandler(
         400,
