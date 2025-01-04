@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import CallToActtion from "../components/CallToAction";
 import { useState, useEffect } from "react";
 import PostCard from "../components/PostCard";
 
@@ -23,15 +22,6 @@ const Home = () => {
           Here you'll find a variety of articles and tutorials on topics such as
           web development, software engineering, and programming languages.
         </p>
-        <Link
-          to="/search"
-          className="text-xs sm:text-sm text-teal-500 font-bold hover:underline"
-        >
-          View all posts
-        </Link>
-      </div>
-      <div className="p-3  dark:bg-slate-700">
-        <CallToActtion />
       </div>
       <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 py-7">
         {posts && posts.length > 0 && (

@@ -9,9 +9,8 @@ const About = () => {
             </h1>
             <div className="text-md text-gray-500 flex flex-col gap-6">
               <p>
-                Gonza is a developer from Cordoba Capital who wants to help
-                build everything that still needs to be built. One block of code
-                at a time.
+                Gonza is a web developer from Córdoba Capital who wants to help
+                build all that remains to be built. One block of code at a time.
               </p>
               <img
                 className="w-full"
