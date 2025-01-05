@@ -135,7 +135,7 @@ const CommentSection = ({ postId }) => {
           </div>
         ) : (
           <div className="text-sm text-teal-500 my-5 flex gap-1">
-            You must be signed out to comment.
+            You must be signed in to comment |
             <Link to={"/sign-in"} className="text-blue-500 hover:underline">
               Sign In
             </Link>
